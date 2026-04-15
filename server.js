@@ -5,6 +5,12 @@ app.use(express.json());
 
 let data = [];
 
+// ✅ Homepage route (VERY IMPORTANT)
+app.get("/", (req, res) => {
+  res.send("ERP Backend is Running ✅");
+});
+
+// API routes
 app.get("/api/data", (req, res) => {
   res.json(data);
 });
@@ -14,12 +20,7 @@ app.post("/api/data", (req, res) => {
   res.json({ message: "Saved" });
 });
 
-// 👉 ADD THIS ROUTE (already good)
-app.get("/", (req, res) => {
-  res.send("ERP Backend is Running ✅");
-});
-
-// 👉 IMPORTANT FIX
+// ✅ Correct port for Render
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log("Server running on port " + PORT));
