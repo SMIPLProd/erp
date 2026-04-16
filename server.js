@@ -1,25 +1,30 @@
-const express = require("express");
-const cors = require("cors");
+let counter = 1;
 
-const app = express();
+function generateWONumber() {
+  const year = new Date().getFullYear();
+  const nextYear = year + 1;
 
-app.use(cors());
-app.use(express.json());
+  const fy = String(year).slice(2) + "-" + String(nextYear).slice(2);
+  const number = String(counter).padStart(3, "0");
 
-let data = [];
+  counter++;
 
-app.get("/", (req, res) => {
-  res.send("ERP Backend is Running ✅");
-});
-
-app.get("/api/data", (req, res) => {
-  res.json(data);
-});
+  return `WO-${number}/${fy}`;
+}
 
 app.post("/api/data", (req, res) => {
-  data.push(req.body);
-  res.json({ message: "Saved" });
-});
+  const woNumber = generateWONumber();
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log("Server running on port " + PORT));
+  const today = new Date();
+  const date = today.toLocaleDateString("en-GB");
+
+  const newOrder = {
+    woNumber,
+    date,
+    ...req.body
+  };
+
+  data.push(newOrder);
+
+  res.json({ message: "Saved", newOrder });
+});
